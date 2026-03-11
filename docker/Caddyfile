@@ -1,0 +1,20 @@
+migrahigrumat.de, www.migrahigrumat.de {
+    root * /srv
+    file_server
+    encode gzip
+
+    # Redirect www to apex
+    @www host www.migrahigrumat.de
+    redir @www https://migrahigrumat.de{uri} permanent
+
+    # Clean URLs — serve index.html for bare /
+    try_files {path} /index.html
+
+    header {
+        # Security headers
+        X-Frame-Options "SAMEORIGIN"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        -Server
+    }
+}
