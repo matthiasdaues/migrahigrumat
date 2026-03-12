@@ -1,5 +1,14 @@
 # ADR-003 Server Hardening Checklist
 
+## Status: Superseded
+
+**Superseded by:** [server_infra/adr/ADR-002-server-hardening.md](../../server_infra/adr/ADR-002-server-hardening.md)
+
+Server hardening is a platform-level concern and has been migrated to `server_infra`.
+The content below is retained for historical reference only.
+
+---
+
 Ubuntu 22.04.5 LTS — non-root sudo user already exists.
 Execute as your sudo user unless noted otherwise.
 
