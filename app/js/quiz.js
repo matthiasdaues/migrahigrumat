@@ -30,12 +30,38 @@ function getResult(score) {
 
 function render() {
   const app = document.getElementById('app');
-  if (state.step === 'result') {
+  if (state.step === 'landing') {
+    renderLanding(app);
+  } else if (state.step === 'result') {
     renderResult(app);
   } else {
     renderCategory(app, state.step);
   }
   updateProgress();
+}
+
+function renderLanding(app) {
+  app.innerHTML = `
+    <div class="card">
+      <div class="category-badge">Willkommen</div>
+      <h2 class="category-title">Amtliche Betroffenheitsprüfung</h2>
+      <p style="font-size:0.95rem;line-height:1.75;color:var(--grey-700);margin-bottom:1.5rem">
+        Der <strong>migrahigrumat</strong> ermittelt Ihren offiziellen Betroffenheitsrang
+        im linksprogressiven Diskurs. Beantworten Sie fünf Kategorien ehrlich —
+        das Ergebnis ist amtlich, verbindlich und nicht anfechtbar.
+      </p>
+      <p style="font-size:0.8rem;color:var(--grey-500);margin-bottom:2rem">
+        Satire. Alle Angaben ohne Gewähr. Kein amtliches Dokument.
+      </p>
+      <div class="nav" style="justify-content:flex-end">
+        <button class="btn btn--primary" id="btn-start">Jetzt starten →</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('btn-start').addEventListener('click', () => {
+    state.step = 0;
+    render();
+  });
 }
 
 function renderCategory(app, stepIndex) {
@@ -179,10 +205,12 @@ function updateProgress() {
   const label = document.getElementById('progress-label');
   if (!bar) return;
   const total = categories.length;
-  const done = state.step === 'result' ? total : state.step;
+  const done = state.step === 'result' ? total : (state.step === 'landing' ? 0 : state.step);
   bar.style.width = `${(done / total) * 100}%`;
   label.textContent = state.step === 'result'
     ? 'Auswertung vollständig'
+    : state.step === 'landing'
+    ? 'Kategorien A – E'
     : `Kategorie ${state.step + 1} von ${total}`;
 }
 
@@ -226,7 +254,7 @@ function showToast(message) {
 }
 
 function restart() {
-  state = { step: 0, selections: {}, specialFlags: [] };
+  state = { step: 'landing', selections: {}, specialFlags: [] };
   window.history.replaceState(null, '', window.location.pathname);
   render();
 }
@@ -238,6 +266,8 @@ export function init() {
     if (decoded) {
       state = decoded;
     }
+  } else {
+    state.step = 'landing';
   }
   render();
 }
