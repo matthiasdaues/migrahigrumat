@@ -44,14 +44,12 @@ function renderLanding(app) {
   app.innerHTML = `
     <div class="card">
       <div class="category-badge">Willkommen</div>
-      <h2 class="category-title">Amtliche Betroffenheitsprüfung</h2>
+      <h2 class="category-title">Verdächtig integriert? Anerkennungswürdig betroffen? Oder moralisch unangreifbar?</h2>
       <p style="font-size:0.95rem;line-height:1.75;color:var(--grey-700);margin-bottom:1.5rem">
-        Der <strong>migrahigrumat</strong> ermittelt Ihren offiziellen Betroffenheitsrang
-        im linksprogressiven Diskurs. Beantworten Sie fünf Kategorien ehrlich —
-        das Ergebnis ist amtlich, verbindlich und nicht anfechtbar.
+        Ermitteln Sie Ihren Betroffenheitsrang – amtlich, kategorisch, endgültig.
       </p>
       <p style="font-size:0.8rem;color:var(--grey-500);margin-bottom:2rem">
-        Satire. Alle Angaben ohne Gewähr. Kein amtliches Dokument.
+        Kategorien A – E · bfB 2025
       </p>
       <div class="nav" style="justify-content:flex-end">
         <button class="btn btn--primary" id="btn-start">Jetzt starten →</button>
