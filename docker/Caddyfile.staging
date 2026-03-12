@@ -1,5 +1,4 @@
-:443 {
-    tls internal
+breitbandbeats.de {
     root * /srv
     file_server
     encode gzip
