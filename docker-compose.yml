@@ -1,17 +1,21 @@
 services:
-  caddy:
-    image: caddy:2-alpine
+  web:
+    image: nginx:alpine
     restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp"
     volumes:
-      - ./app:/srv:ro
-      - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy_data:/data
-      - caddy_config:/config
+      - ./app:/usr/share/nginx/html:ro
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.migrahigrumat.rule=Host(`migrahigrumat.de`) || Host(`www.migrahigrumat.de`)"
+      - "traefik.http.routers.migrahigrumat.entrypoints=websecure"
+      - "traefik.http.routers.migrahigrumat.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.migrahigrumat.middlewares=security-headers@file,www-redirect@docker"
+      - "traefik.http.middlewares.www-redirect.redirectregex.regex=^https://www\\.migrahigrumat\\.de/(.*)"
+      - "traefik.http.middlewares.www-redirect.redirectregex.replacement=https://migrahigrumat.de/$${1}"
+      - "traefik.http.middlewares.www-redirect.redirectregex.permanent=true"
 
-volumes:
-  caddy_data:
-  caddy_config:
+networks:
+  proxy:
+    external: true

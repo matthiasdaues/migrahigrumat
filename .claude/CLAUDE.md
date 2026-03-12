@@ -9,9 +9,9 @@ The app presents the "Migra-Scorecard" — a mock scoring rubric that satirizes 
 ## Scope
 
 - Single-page quiz app (plain HTML + vanilla JS, no build step)
-- Dockerized deployment on a VPS (Caddy-only, static files)
-- GitHub Actions CI/CD pipeline (deploy on semver tag)
-- Server hardening as part of setup
+- Dockerized deployment on a VPS (nginx:alpine, served behind Traefik)
+- GitHub Actions CI/CD pipeline (deploy on semver tag `mm-v*`)
+- Server hardening documented in `server_infra/adr/`
 
 ## Source Material
 
@@ -27,7 +27,7 @@ See `.claude/brief.md` for the full scoring rubric and result labels.
 ## Project Structure
 
 ```
-app/              # Static files (served by Caddy)
+app/              # Static files (served by nginx:alpine)
   index.html
   impressum.html
   css/style.css
@@ -36,11 +36,8 @@ app/              # Static files (served by Caddy)
     quiz.js       # Quiz logic and rendering
     data.js       # Quiz content and scoring
     share.js      # URL state encode/decode
-docker/
-  Caddyfile           # Production
-  Caddyfile.local     # Local dev (port 8080, no TLS)
-docker-compose.yml        # Production
-docker-compose.local.yml  # Local dev
+docker-compose.yml        # Production (nginx + Traefik labels, joins proxy network)
+docker-compose.local.yml  # Local dev (nginx on port 8080, no Traefik)
 adr/              # Architecture Decision Records
 ```
 
@@ -58,7 +55,7 @@ docker compose down
 
 ## Deployment
 
-- Trigger: push a semver tag (`git tag v1.0.0 && git push origin v1.0.0`)
-- GitHub Actions syncs `app/`, `docker/`, `docker-compose.yml` to server via rsync over SSH
-- Then restarts containers on server
-- Server: Ubuntu 24.04 LTS, domain: migrahigrumat.de
+- Trigger: push a semver tag prefixed `mm-v*` (e.g. `git tag mm-v1.0.0 && git push origin mm-v1.0.0`)
+- GitHub Actions syncs `app/` and `docker-compose.yml` to server via rsync over SSH
+- Then restarts containers on server — Traefik must already be running (see `server_infra/`)
+- Server: Ubuntu 22.04.5 LTS, IP: 79.143.178.253, domain: migrahigrumat.de

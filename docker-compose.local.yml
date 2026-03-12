@@ -1,7 +1,7 @@
 services:
-  app:
-    image: caddy:2-alpine
-    network_mode: host
+  web:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
     volumes:
-      - ./app:/srv:ro
-      - ./docker/Caddyfile.local:/etc/caddy/Caddyfile:ro
+      - ./app:/usr/share/nginx/html:ro
