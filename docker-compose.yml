@@ -4,7 +4,7 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"
-      # - "443:443"        # uncomment when DNS is live
+      - "443:443"
       # - "443:443/udp"    # HTTP/3 — uncomment when DNS is live
     volumes:
       - ./app:/srv:ro
