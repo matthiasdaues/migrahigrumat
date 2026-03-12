@@ -4,11 +4,11 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"
-      - "443:443"
-      - "443:443/udp"   # HTTP/3
+      # - "443:443"        # uncomment when DNS is live
+      # - "443:443/udp"    # HTTP/3 — uncomment when DNS is live
     volumes:
       - ./app:/srv:ro
-      - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./docker/Caddyfile.staging:/etc/caddy/Caddyfile:ro  # swap to Caddyfile once DNS is live
       - caddy_data:/data
       - caddy_config:/config
 
